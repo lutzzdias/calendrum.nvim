@@ -97,7 +97,7 @@ function M.build_month(year, month)
 		end
 	end
 
-	M._print_month(calendar)
+	return calendar
 end
 
 return M
