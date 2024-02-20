@@ -31,19 +31,19 @@ M.week_days = {
 	},
 }
 
-function M.is_leap_year(year)
+M.is_leap_year = function(year)
 	-- if year is divisible by 4 it is a leap year (with exceptions)
 	-- exceptions: if year is divisible by 100 and by 400 it is a leap year
 	return (year % 4 == 0) and not (year % 100 == 0) or (year % 400 == 0)
 end
 
-function M.get_first_day(year, month)
+M.get_first_day = function(year, month)
 	-- time = first day of the month
 	local time = os.time({ year = year, month = month, day = 1 })
 	return os.date("*t", time)
 end
 
-function M.get_last_day(year, month)
+M.get_last_day = function(year, month)
 	local next_month_year = year
 	local next_month = month + 1
 
@@ -57,13 +57,7 @@ function M.get_last_day(year, month)
 	return os.date("*t", time)
 end
 
-function M._print_month(month)
-	for i = 1, #month do
-		print(table.concat(month[i], " "))
-	end
-end
-
-function M.build_month(year, month)
+M.build_month = function(year, month)
 	local calendar = {}
 	local empty_cell = "  "
 	local day = 1
