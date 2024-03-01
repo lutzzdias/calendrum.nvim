@@ -29,7 +29,7 @@ function M:new_line()
 end
 
 --- @param str string
---- @param hl? Highlight
+--- @param hl? string
 function M:append(str, hl)
 	-- split str into lines
 	local lines = vim.split(str, "\n")
@@ -44,9 +44,7 @@ function M:append(str, hl)
 		return
 	end
 
-	-- TODO: test and fix
-	-- TODO: simplify call (calculate row, from and to)
-	self:highlight(hl.line, hl.from, hl.to, "Calendrum" .. hl.group)
+	self:highlight(#lines, 0, #lines[#lines], hl)
 end
 
 function M:highlight(row, from, to, group)
