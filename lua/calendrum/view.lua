@@ -1,4 +1,5 @@
 local Text = require("calendrum.text")
+local Config = require("calendrum.config")
 
 --- @class WinOptions
 --- @field relative "editor" | "win" | "cursor" | "mouse"
@@ -90,8 +91,13 @@ function M:create(opts)
 	vim.api.nvim_buf_set_option(self.buf, "bufhidden", "wipe")
 
 	vim.api.nvim_set_current_win(self.win)
+end
 
+function M:render()
 	vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, self.text.lines)
+	for _, hl in ipairs(self.text.hl) do
+		vim.api.nvim_buf_add_highlight(self.buf, Config.namespace, hl.group, hl.line, hl.from, hl.to)
+	end
 end
 
 function M:close()
