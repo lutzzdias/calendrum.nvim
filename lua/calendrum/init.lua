@@ -9,11 +9,8 @@ M.setup = function(opts)
 	local v = View.new()
 	local c = Calendar.new()
 
-	for _, d in ipairs(c.month.days) do
-		v.text:append(d.date, d.highlight)
-	end
-
 	v:create()
+	c:render_month(v)
 	v:render()
 end
 

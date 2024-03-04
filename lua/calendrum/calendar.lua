@@ -46,7 +46,7 @@ function M.generate_days(year, month, opts)
 	local days = {}
 
 	for i = 1, num_days do
-		local date = os.date("%Y-%m-%d", os.time({ year = year, month = month, day = i }))
+		local date = os.date("%d", os.time({ year = year, month = month, day = i }))
 		local day = {
 			date = date,
 			is_today = date == os.date("%Y-%m-%d"),
@@ -69,6 +69,22 @@ M.is_leap_year = function(year)
 	-- if year is divisible by 4 it is a leap year (with exceptions)
 	-- exceptions: if year is divisible by 100 and by 400 it is a leap year
 	return (year % 4 == 0) and not (year % 100 == 0) or (year % 400 == 0)
+end
+
+--- @param view View
+function M:render_month(view)
+	local week_days = { " S", " M", " T", " W", " T", " F", " S" }
+	view.text:append(table.concat(week_days, " "))
+	view.text:new_line()
+
+	local week = 0
+	for i, day in ipairs(self.month.days) do
+		week = week + 1
+		view.text:append(day.date .. " ", day.highlight)
+		if week % 7 == 0 or i == #self.month.days then
+			view.text:new_line()
+		end
+	end
 end
 
 return M

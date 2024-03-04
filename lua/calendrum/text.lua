@@ -28,15 +28,23 @@ function M:new_line()
 	table.insert(self.lines, "")
 end
 
+--- appends string to last line, if there are \n in str it will be split into
+--- multiple lines
+--
 --- @param str string
 --- @param hl? string
 function M:append(str, hl)
 	-- split str into lines
 	local lines = vim.split(str, "\n")
 
+	-- append to last line
+	local last_line = table.remove(self.lines) or ""
+	last_line = last_line .. lines[1]
+	table.insert(self.lines, last_line)
+
 	-- insert each line into self.lines
-	for _, line in ipairs(lines) do
-		table.insert(self.lines, line)
+	for i = 2, #lines do
+		table.insert(self.lines, lines[i])
 	end
 
 	-- no need to setup highlights
@@ -44,9 +52,16 @@ function M:append(str, hl)
 		return
 	end
 
+	-- TODO: pass correct values based on day position
 	self:highlight(#lines, 0, #lines[#lines], hl)
 end
 
+--- Highlights a range of text (needs refactoring)
+--
+--- @param row number
+--- @param from number
+--- @param to number
+--- @param group string
 function M:highlight(row, from, to, group)
 	local line = self.lines[row]
 	local before = vim.fn.strcharpart(line, 0, from)

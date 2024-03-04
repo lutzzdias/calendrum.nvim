@@ -74,6 +74,8 @@ function M.grid_size(value, max)
 	return math.floor((max - M.window_size(value, max)) / 2)
 end
 
+--- Creates a floating window
+--
 --- @param opts? WinOptions
 function M:create(opts)
 	opts = vim.tbl_deep_extend("force", self.opts, opts or {})
@@ -93,6 +95,7 @@ function M:create(opts)
 	vim.api.nvim_set_current_win(self.win)
 end
 
+--- Renders text and highlights
 function M:render()
 	vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, self.text.lines)
 	for _, hl in ipairs(self.text.hl) do
@@ -100,11 +103,13 @@ function M:render()
 	end
 end
 
+--- Closes the window and deletes the buffer
 function M:close()
 	local w = self.win
 	local b = self.buf
 	self.win = nil
 	self.buf = nil
+
 	if w and vim.api.nvim_win_is_valid(w) then
 		vim.api.nvim_win_close(w, true)
 	end
@@ -114,6 +119,7 @@ function M:close()
 	end
 end
 
+--- Close if open, create if closed
 function M:toggle()
 	if not self.win and not self.buf then
 		self:create()
