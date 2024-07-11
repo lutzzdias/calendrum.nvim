@@ -1,90 +1,61 @@
---- @class Day
---- @field date string
---- @field highlight? string hlgroup
---- @field is_today boolean
---- @field opts? table
---
---- @class Month
---- @field days Day[]
---- @field num number
---- @field name string
---- @field year number
---- @field opts? table
---
 local M = {}
 M.__index = M
 
-function M.new()
-	-- create new instance with default values
-	local instance = {}
-
-	-- anything not found on instance will be looked up in M, including functions
-	setmetatable(instance, M)
-
-	instance:generate_month(2024, 3, {})
-
-	return instance
+function M.generate_header()
+	return "Su Mo Tu We Th Fr Sa"
 end
 
-function M:generate_month(year, month, opts)
-	-- set the year and month
-	self.month = {
-		days = M.generate_days(year, month),
-		num = month,
-		name = os.date("%B", os.time({ year = year, month = month, day = 1 })),
-		year = year,
-		opts = opts or {},
-	}
-
-	return self
+function M.get_number_of_days(year, month)
+	return os.date("*t", os.time({ year = year, month = month + 1, day = 0 })).day
 end
 
-function M.generate_days(year, month, opts)
-	opts = opts or {}
+function M.get_starting_weekday(year, month)
+	return os.date("*t", os.time({ year = year, month = month, day = 1 })).wday - 1
+end
 
-	local num_days = os.date("%d", os.time({ year = year, month = month + 1, day = 0 }))
-	local days = {}
+function M.get_current_year()
+	return os.date("%Y")
+end
 
-	for i = 1, num_days do
-		local date = os.date("%d", os.time({ year = year, month = month, day = i }))
-		local day = {
-			date = date,
-			is_today = date == os.date("%Y-%m-%d"),
-			opts = opts,
-		}
+function M.get_current_month()
+	return os.date("%m")
+end
 
-		if day.is_today then
-			day.highlight = "@type"
-		end
+function M.generate_weeks(days_in_month, starting_weekday)
+	local weeks = {}
+	local week = {}
 
-		table.insert(days, day)
+	for _ = 1, starting_weekday do
+		table.insert(week, "  ")
 	end
 
-	return days
-end
-
---- @param year number
---- @return boolean
-M.is_leap_year = function(year)
-	-- if year is divisible by 4 it is a leap year (with exceptions)
-	-- exceptions: if year is divisible by 100 and by 400 it is a leap year
-	return (year % 4 == 0) and not (year % 100 == 0) or (year % 400 == 0)
-end
-
---- @param view View
-function M:render_month(view)
-	local week_days = { " S", " M", " T", " W", " T", " F", " S" }
-	view.text:append(table.concat(week_days, " "))
-	view.text:new_line()
-
-	local week = 0
-	for i, day in ipairs(self.month.days) do
-		week = week + 1
-		view.text:append(day.date .. " ", day.highlight)
-		if week % 7 == 0 or i == #self.month.days then
-			view.text:new_line()
+	for day = 1, days_in_month do
+		table.insert(week, string.format("%2d", day))
+		if #week == 7 then
+			table.insert(weeks, table.concat(week, " "))
+			week = {}
 		end
 	end
+
+	if #week > 0 then
+		table.insert(weeks, table.concat(week, " "))
+	end
+
+	return weeks
+end
+
+function M.generate_calendar()
+	local year = M.get_current_year()
+	local month = M.get_current_month()
+
+	local days_in_month = M.get_number_of_days(year, month)
+	local starting_weekday = M.get_starting_weekday(year, month)
+
+	local header = M.generate_header()
+	local weeks = M.generate_weeks(days_in_month, starting_weekday)
+
+	table.insert(weeks, 1, header)
+	return weeks
 end
 
 return M
