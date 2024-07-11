@@ -1,11 +1,12 @@
+local Util = require("calendrum.util")
+
 local M = {}
-local ui = require("calendrum.ui")
 
 M.setup = function(opts)
 	opts = opts or {}
 
 	vim.keymap.set("n", "<leader>cm", function()
-		ui.toggle_calendar()
+		Util.float()
 	end, { noremap = true, silent = true })
 end
 

@@ -2,6 +2,7 @@ local M = {}
 
 local log = require("calendrum.dev").log
 local date = require("calendrum.date")
+local colors = require("calendrum.colors")
 local popup = require("plenary.popup")
 
 Win_id = nil
@@ -10,6 +11,8 @@ Buf_id = nil
 local function create_window()
 	log.trace("_create_window()")
 
+	colors.setup()
+
 	local width = 32
 	local height = 10
 	local borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
@@ -17,12 +20,15 @@ local function create_window()
 	Buf_id = vim.api.nvim_create_buf(false, false)
 	Win_id = popup.create(Buf_id, {
 		title = "Calendrum",
+		highlight = colors.colors.Highlight,
 		line = math.floor(((vim.o.lines - height) / 2) - 1),
 		col = math.floor((vim.o.columns - width) / 2),
 		minwidth = width,
 		minheight = height,
 		borderchars = borderchars,
 	})
+
+	-- vim.api.nvim_win_set_option(win.border.win_id, "winhl", "Normal:HarpoonBorder")
 
 	return {
 		id = Win_id,
