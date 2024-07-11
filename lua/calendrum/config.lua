@@ -1,33 +1,18 @@
----@class CoreConfig
 local M = {}
 
-M.version = "1.0.0"
+M.namespace = vim.api.nvim_create_namespace("Calendrum")
 
-M.namespace = vim.api.nvim_create_namespace("calendrum")
+---@class Options
+local defaults = {}
 
----@class Config
-M.defaults = {
-	ui = {
-		-- < 1 = percentage
-		-- > 1 = fixed size
-		size = {
-			width = 0.8,
-			height = 0.8,
-		},
-		-- accepts same border values as |nvim_open_win()|
-		border = "rounded",
-		-- how frequently should the ui process render events
-		throttle = 100,
-	},
-}
-
----@type Config
+---@type Options
 M.options = {}
 
----@param opts Config
-function M.setup(opts)
-	opts = opts or {}
-	M.options = vim.tbl_deep_extend("force", M.options, opts)
+---@param options? Options
+function M.setup(options)
+	M.options = vim.tbl_deep_extend("force", {}, defaults, options or {})
 end
+
+M.setup()
 
 return M
