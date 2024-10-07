@@ -5,8 +5,7 @@ local Util = require("calendrum.util")
 local M = {}
 
 M.setup = function(opts)
-	local ns = vim.api.nvim_create_namespace("calendrum")
-	Util.highlight.define_highlights(ns)
+	Util.highlight.define_highlights()
 
 	opts = opts or {}
 
@@ -20,7 +19,7 @@ M.setup = function(opts)
 	win:insert(cal)
 
 	-- Example: Apply highlight to the first line
-	vim.api.nvim_buf_add_highlight(win.buf_id, ns, "@comment", 0, 0, math.floor(vim.api.nvim_win_get_width(0) * 0.5))
+	vim.api.nvim_buf_add_highlight(win.buf_id, 0, "CalendrumToday", 0, 0, -1)
 end
 
 M.setup()
