@@ -9,17 +9,41 @@ M.setup = function(opts)
 
 	opts = opts or {}
 
-	local win = Window:new()
-	win:open()
+	M.win = Window:new()
+	M.win:open()
 
-	local year = Util.date.get_current_year()
-	local month = Util.date.get_current_month()
+	M.year = Util.date.get_current_year()
+	M.month = Util.date.get_current_month()
 
-	local cal = Calendar.generate_month(year, month)
-	win:insert(cal)
+	local cal = Calendar.generate_month(M.year, M.month)
+	M.win:insert(cal)
 
 	-- Example: Apply highlight to the first line
-	vim.api.nvim_buf_add_highlight(win.buf_id, 0, "CalendrumToday", 0, 0, -1)
+	vim.api.nvim_buf_add_highlight(M.win.buf_id, 0, "CalendrumToday", 0, 0, -1)
+end
+
+-- TODO: Move to better fitting place
+M.next_month = function()
+	M.month = M.month + 1
+	if M.month > 12 then
+		M.month = 1
+		M.year = M.year + 1
+	end
+
+	local cal = Calendar.generate_month(M.year, M.month)
+	M.win:insert(cal)
+end
+
+-- TODO: Move to better fitting place
+M.prev_month = function()
+	M.month = M.month - 1
+	if M.month < 1 then
+		M.month = 12
+		M.year = M.year - 1
+	end
+
+	local cal = Calendar.generate_month(M.year, M.month)
+	M.win:insert(cal)
 end
 
 M.setup()
