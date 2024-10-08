@@ -60,9 +60,36 @@ function M:close()
 	self.bufnr = nil
 end
 
-function M:insert(content)
+function M:render_month(month)
 	if self.buf_id ~= nil and vim.api.nvim_buf_is_valid(self.buf_id) then
-		vim.api.nvim_buf_set_lines(self.buf_id, 0, -1, false, content)
+		local lines = {}
+		for _, week in ipairs(month) do
+			local line_table = {}
+			for i, day in ipairs(week) do
+				line_table[i] = day.value
+			end
+			local line = table.concat(line_table, " ")
+			table.insert(lines, line)
+		end
+		vim.api.nvim_buf_set_lines(self.buf_id, 0, -1, false, lines)
+		self:apply_highlights(month)
+	end
+end
+
+function M:apply_highlights(month)
+	for week_idx, week in ipairs(month) do
+		for day_idx, day in ipairs(week) do
+			if day.highlight_group ~= "" then
+				vim.api.nvim_buf_add_highlight(
+					self.buf_id,
+					-1,
+					day.highlight,
+					week_idx - 1,
+					(day_idx - 1) * 3,
+					day_idx * 3
+				)
+			end
+		end
 	end
 end
 

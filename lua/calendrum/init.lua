@@ -16,10 +16,7 @@ M.setup = function(opts)
 	M.month = Util.date.get_current_month()
 
 	local cal = Calendar.generate_month(M.year, M.month)
-	M.win:insert(cal)
-
-	-- Example: Apply highlight to the first line
-	vim.api.nvim_buf_add_highlight(M.win.buf_id, 0, "CalendrumToday", 0, 0, -1)
+	M.win:render_month(cal)
 end
 
 -- TODO: Move to better fitting place

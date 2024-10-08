@@ -18,8 +18,9 @@ source ./lua/calendrum/init.lua
 
 # TODO
 
-- [ ] define reusable highlight function
-- [ ] apply highlights to correct places (today, weekend, actions, etc)
+- [x] define reusable highlight function
+- [x] apply highlights to correct places (today, weekend, actions, etc)
 - [x] allow for next/prev months to be shown
 - [ ] allow for other plugins to define hooks on keypress
 - [ ] allow for other plugins to define highlights
+- [ ] allow for other plugins to define conditions to apply custom highlight
