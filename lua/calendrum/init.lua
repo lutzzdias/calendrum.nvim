@@ -15,8 +15,9 @@ M.setup = function(opts)
 	M.year = Util.date.get_current_year()
 	M.month = Util.date.get_current_month()
 
-	local cal = Calendar.generate_month(M.year, M.month)
-	M.win:render_month(cal)
+	local cal = Calendar:new()
+	local month = cal:generate_month(M.year, M.month)
+	M.win:render_month(month)
 end
 
 -- TODO: Move to better fitting place
