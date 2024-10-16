@@ -76,7 +76,6 @@ function M:generate_month(y, m)
 	return month
 end
 
--- TODO: notify calendar view to re-render
 M.next_month = function()
 	M.month = M.month + 1
 
@@ -84,15 +83,21 @@ M.next_month = function()
 		M.month = 1
 		M.year = M.year + 1
 	end
+
+	local c = M:generate_month(M.year, M.month)
+	require("calendrum.view.window"):render_month(c)
 end
 
--- TODO: notify calendar view to re-render
 M.prev_month = function()
 	M.month = M.month - 1
+
 	if M.month < 1 then
 		M.month = 12
 		M.year = M.year - 1
 	end
+
+	local c = M:generate_month(M.year, M.month)
+	require("calendrum.view.window"):render_month(c)
 end
 
 return M
