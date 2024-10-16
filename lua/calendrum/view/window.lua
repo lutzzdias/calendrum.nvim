@@ -1,22 +1,11 @@
-local Util = require("calendrum.util")
-
 ---@class Window
----@field win_id number
----@field buf_id number
-local M = {}
+---@field win_id? number
+---@field buf_id? number
+local M = {
+	win_id = nil,
+	buf_id = nil,
+}
 M.__index = M
-
--- TODO: accept config as param
-function M:new()
-	-- default initial values
-	local instance = {
-		win_id = nil,
-		buf_id = nil,
-	}
-
-	setmetatable(instance, self)
-	return instance
-end
 
 function M:_create_buf()
 	return vim.api.nvim_create_buf(false, true)

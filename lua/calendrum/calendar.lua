@@ -1,18 +1,12 @@
 local Util = require("calendrum.util")
 
-local M = {}
+local M = {
+	conditions = Util.highlight.default_highlights(),
+	year = Util.date.get_current_year(),
+	month = Util.date.get_current_month(),
+}
 M.__index = M
-
-function M:new()
-	local instance = {
-		conditions = Util.highlight.default_highlights(),
-		year = Util.date.get_current_year(),
-		month = Util.date.get_current_month(),
-	}
-
-	setmetatable(instance, self)
-	return instance
-end
+setmetatable(M, M)
 
 function M:register_condition(condition, highlight)
 	table.insert(self.conditions, { condition = condition, highlight = highlight })
@@ -85,6 +79,7 @@ end
 -- TODO: notify calendar view to re-render
 M.next_month = function()
 	M.month = M.month + 1
+
 	if M.month > 12 then
 		M.month = 1
 		M.year = M.year + 1
