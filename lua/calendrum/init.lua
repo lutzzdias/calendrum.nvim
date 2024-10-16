@@ -25,13 +25,9 @@ M.register_highlight = function(condition, highlight)
 	M.calendar:register_condition(condition, highlight)
 end
 
+-- TODO: Allow for this function to run with no active window
 M.register_action = function(keymap, callback)
-	local date = {
-		year = M.calendar.year,
-		month = M.calendar.month,
-		day = M.win.get_date_from_cursor(M.calendar.year, M.calendar.month),
-	}
-	M.win:register_action(keymap, callback, date)
+	M.win:register_action(keymap, callback)
 end
 
 return M

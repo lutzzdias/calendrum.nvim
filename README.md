@@ -24,6 +24,7 @@ source ./lua/calendrum/init.lua
 - [x] allow for other plugins to define conditions to apply custom highlight
 - [x] allow for other plugins to define hooks on keypress
 - [x] show year/month
+- [ ] allow for registering custom action without calendar being open
 - [ ] fix buffersize
 - [ ] add lua type annotations
 - [ ] allow custom view (vsplit, hsplit, 1+ months at a time)

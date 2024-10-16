@@ -129,9 +129,14 @@ end
 
 ---@param keymap string
 ---@param callback function
----@param date { year: number, month: number, day: number }
-function M:register_action(keymap, callback, date)
+function M:register_action(keymap, callback)
 	vim.keymap.set("n", keymap, function()
+		local Calendar = require("calendrum.calendar")
+		local date = {
+			year = tonumber(Calendar.year),
+			month = tonumber(Calendar.month),
+			day = self.get_date_from_cursor(Calendar.year, Calendar.month),
+		}
 		callback(date)
 	end, {
 		noremap = true,
