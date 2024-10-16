@@ -1,3 +1,5 @@
+local Util = require("calendrum.util")
+
 ---@class Window
 ---@field win_id number
 ---@field buf_id number
@@ -91,6 +93,49 @@ function M:apply_highlights(month)
 			end
 		end
 	end
+end
+
+function M.get_date_from_cursor(year, month)
+	local cursor_pos = vim.api.nvim_win_get_cursor(0)
+	local cursor_line = cursor_pos[1] -- 1-based index
+	local cursor_col = cursor_pos[2] + 1 -- 0-based, add 1 for Lua's indexing
+
+	-- Adjust for the header (day names) being on line 1
+	local adjusted_line = cursor_line - 1
+
+	-- Only lines 2 to 7 contain days, if cursor is outside these lines return nil
+	if adjusted_line < 1 or adjusted_line > 6 then
+		return nil
+	end
+
+	-- Calculate the starting day of the month (1 = Sunday, 7 = Saturday)
+	local start_day = os.date("*t", os.time({ year = year, month = month, day = 1 })).wday
+
+	-- Calculate which day index in the week the cursor is over
+	local day_index_in_week = math.floor((cursor_col - 1) / 3) + 1
+
+	-- Adjust the cursor position: valid slots for each day are in columns 1, 2 for the first slot and 4, 5 for the second, etc.
+	if (cursor_col - 1) % 3 ~= 0 and (cursor_col - 1) % 3 ~= 1 then
+		return nil -- Not on a valid day number
+	end
+
+	-- Calculate the day number based on the line and column
+	local day_number = (adjusted_line - 1) * 7 + day_index_in_week
+
+	-- Adjust the day number based on the start day
+	if day_number >= start_day then
+		day_number = day_number - (start_day - 1)
+	else
+		return nil -- Not a valid day in the current month
+	end
+
+	-- Check if the day exists in the month (avoid returning values larger than the month's total days)
+	local last_day_of_month = os.date("*t", os.time({ year = year, month = month + 1, day = 0 })).day
+	if day_number > last_day_of_month then
+		return nil
+	end
+
+	return day_number
 end
 
 return M

@@ -6,7 +6,6 @@ M.__index = M
 function M:new()
 	local instance = {
 		conditions = Util.highlight.default_highlights(),
-		actions = {},
 		year = os.date("%Y"),
 		month = os.date("%m"),
 	}
