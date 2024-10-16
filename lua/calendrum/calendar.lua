@@ -6,8 +6,8 @@ M.__index = M
 function M:new()
 	local instance = {
 		conditions = Util.highlight.default_highlights(),
-		year = os.date("%Y"),
-		month = os.date("%m"),
+		year = Util.date.get_current_year(),
+		month = Util.date.get_current_month(),
 	}
 
 	setmetatable(instance, self)
@@ -41,6 +41,9 @@ function M:apply_highlights(year, month, day)
 end
 
 function M:generate_month(y, m)
+	y = y or self.year
+	m = m or self.month
+
 	local days_in_month = Util.date.get_number_of_days(y, m)
 	local starting_weekday = Util.date.get_starting_weekday(y, m)
 
@@ -77,6 +80,24 @@ function M:generate_month(y, m)
 	table.insert(month, 1, header)
 
 	return month
+end
+
+-- TODO: notify calendar view to re-render
+M.next_month = function()
+	M.month = M.month + 1
+	if M.month > 12 then
+		M.month = 1
+		M.year = M.year + 1
+	end
+end
+
+-- TODO: notify calendar view to re-render
+M.prev_month = function()
+	M.month = M.month - 1
+	if M.month < 1 then
+		M.month = 12
+		M.year = M.year - 1
+	end
 end
 
 return M
