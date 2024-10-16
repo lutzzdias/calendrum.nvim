@@ -22,4 +22,8 @@ source ./lua/calendrum/init.lua
 - [x] apply highlights to correct places (today, weekend, actions, etc)
 - [x] allow for next/prev months to be shown
 - [x] allow for other plugins to define conditions to apply custom highlight
-- [ ] allow for other plugins to define hooks on keypress
+- [x] allow for other plugins to define hooks on keypress
+- [ ] show year/month
+- [ ] fix buffersize
+- [ ] add lua type annotations
+- [ ] allow custom view (vsplit, hsplit, 1+ months at a time)

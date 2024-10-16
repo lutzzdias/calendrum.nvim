@@ -127,4 +127,17 @@ function M.get_date_from_cursor(year, month)
 	return day_number
 end
 
+---@param keymap string
+---@param callback function
+---@param date { year: number, month: number, day: number }
+function M:register_action(keymap, callback, date)
+	vim.keymap.set("n", keymap, function()
+		callback(date)
+	end, {
+		noremap = true,
+		silent = true,
+		buffer = self.buf_id,
+	})
+end
+
 return M
