@@ -90,7 +90,7 @@ function M.get_date_from_cursor(year, month)
 	local cursor_col = cursor_pos[2] + 1 -- 0-based, add 1 for Lua's indexing
 
 	-- Adjust for the header (day names) being on line 1
-	local adjusted_line = cursor_line - 1
+	local adjusted_line = cursor_line - 2
 
 	-- Only lines 2 to 7 contain days, if cursor is outside these lines return nil
 	if adjusted_line < 1 or adjusted_line > 6 then

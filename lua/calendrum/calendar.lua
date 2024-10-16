@@ -41,7 +41,14 @@ function M:generate_month(y, m)
 	local days_in_month = Util.date.get_number_of_days(y, m)
 	local starting_weekday = Util.date.get_starting_weekday(y, m)
 
-	local header = self:generate_header()
+	local header_date = {
+		{ value = "  ", highlight = "CalendrumHeader" },
+		{ value = "  ", highlight = "CalendrumHeader" },
+		{ value = string.format("%04d-%02d", y, m), highlight = "CalendrumHeader" },
+		{ value = "  ", highlight = "CalendrumHeader" },
+		{ value = "  ", highlight = "CalendrumHeader" },
+	}
+	local header_wdays = self:generate_header()
 
 	local month = {}
 	local week = {}
@@ -71,7 +78,8 @@ function M:generate_month(y, m)
 		table.insert(month, week)
 	end
 
-	table.insert(month, 1, header)
+	table.insert(month, 1, header_date)
+	table.insert(month, 2, header_wdays)
 
 	return month
 end

@@ -23,7 +23,7 @@ source ./lua/calendrum/init.lua
 - [x] allow for next/prev months to be shown
 - [x] allow for other plugins to define conditions to apply custom highlight
 - [x] allow for other plugins to define hooks on keypress
-- [ ] show year/month
+- [x] show year/month
 - [ ] fix buffersize
 - [ ] add lua type annotations
 - [ ] allow custom view (vsplit, hsplit, 1+ months at a time)
